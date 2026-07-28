@@ -12,6 +12,7 @@ import {
   createTask,
   deleteTask,
   getAllTask,
+  getTaskById,
   updateTask,
 } from "../controllers/tasks.controller.js";
 
@@ -20,8 +21,17 @@ const taskRoute = Router();
 // GET /api/v1/tasks
 taskRoute.get("/tasks", authorize, getAllTask);
 
+// GET /api/v1/tasks/:id
+taskRoute.get(
+  "/tasks/:id",
+  authorize,
+  validate(taskIdParamSchema, "params"),
+  getTaskById,
+);
+
 // POST /api/v1/tasks
 taskRoute.post("/tasks", authorize, validate(createTaskSchema), createTask);
+
 
 
 // PUT /api/v1/tasks/:id
