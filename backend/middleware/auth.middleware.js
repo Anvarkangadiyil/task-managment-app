@@ -4,11 +4,7 @@ import prisma from "../config/prisma.js";
 
 export const authorize = async (req, res, next) => {
   try {
-    let token;
-
-    if (req.cookies && req.cookies.token) {
-      token = req.cookies.token;
-    }
+    const token = req.cookies?.token;
 
     if (!token) {
       return res.status(401).json({
@@ -35,9 +31,8 @@ export const authorize = async (req, res, next) => {
   } catch (error) {
     res.status(401).json({
       success: false,
-      message: "Unauthorized",
+      message: "Unauthorized or invalid token",
       error: error.message,
     });
   }
 };
-

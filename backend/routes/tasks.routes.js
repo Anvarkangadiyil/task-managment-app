@@ -12,7 +12,6 @@ import {
   createTask,
   deleteTask,
   getAllTask,
-  getTask,
   updateTask,
 } from "../controllers/tasks.controller.js";
 

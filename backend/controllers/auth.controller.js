@@ -27,7 +27,7 @@ export const signUp = async (req, res) => {
         name,
         email,
         password: hashedPassword,
-        role: Role.user,
+        role: role || Role.user,
       },
       select: {
         id: true,
@@ -71,15 +71,15 @@ export const signIn = async (req, res) => {
       { userId: user.id, role: user.role },
       JWT_SECRET,
       {
-        expiresIn: JWT_EXPIRES_IN || "1h",
+        expiresIn: JWT_EXPIRES_IN || "1d",
       },
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 3600000,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     const { password: _, ...userWithoutPassword } = user;
@@ -87,7 +87,6 @@ export const signIn = async (req, res) => {
     return res.status(200).json({
       message: "Login successful",
       user: userWithoutPassword,
-      token,
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -116,4 +115,3 @@ export const getMe = async (req, res) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
-
