@@ -1,6 +1,6 @@
-import { config } from 'dotenv';
+import { config } from "dotenv";
 
-const envMode = process.env.NODE_ENV || 'development';
+const envMode = process.env.NODE_ENV || "development";
 
 config({ path: `.env.${envMode}.local` });
 
@@ -9,5 +9,6 @@ export const {
   NODE_ENV,
   DATABASE_URL,
   DIRECT_URL,
+  JWT_SECRET,
+  JWT_EXPIRES_IN,
 } = process.env;
-
