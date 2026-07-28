@@ -1,6 +1,7 @@
 import type { User } from "./user";
 
-export type TaskStatus = "Pending" | "In Progress" | "Completed";
+export type TaskStatus = "Pending" | "In_Progress" | "Completed" | "In Progress";
+
 
 export interface Task {
   id: number;
@@ -24,3 +25,21 @@ export interface UpdateTaskInput {
   description?: string | null;
   status?: TaskStatus;
 }
+
+export interface PaginationMeta {
+  totalTasks: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+export interface TaskQueryParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  status?: string;
+  userId?: string | number;
+}
+

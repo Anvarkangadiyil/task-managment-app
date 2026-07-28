@@ -1,4 +1,4 @@
-import { Role } from "@prisma/client";
+import { Role, TaskStatus } from "@prisma/client";
 import prisma from "../config/prisma.js";
 
 const userSelect = {
@@ -10,19 +10,69 @@ const userSelect = {
 
 export const getAllTask = async (req, res) => {
   try {
-    const where = req.user.role === Role.admin ? {} : { userId: req.user.id };
+    const { page, limit, search, status, userId } = req.query;
 
-    const tasks = await prisma.task.findMany({
-      where,
-      orderBy: { createdAt: "desc" },
-      include: {
-        user: {
-          select: userSelect,
+    // Parse pagination query parameters
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 10));
+    const skip = (pageNum - 1) * limitNum;
+
+   
+    const where = {};
+
+    // RBAC: Standard users can ONLY view their own tasks
+    if (req.user.role !== Role.admin) {
+      where.userId = req.user.id;
+    } else if (userId && !isNaN(Number(userId))) {
+      // Admins can optionally filter by a specific user ID
+      where.userId = Number(userId);
+    }
+
+    // Search filter: Case-insensitive search on task title
+    if (search && typeof search === "string" && search.trim() !== "") {
+      where.title = {
+        contains: search.trim(),
+        mode: "insensitive",
+      };
+    }
+
+   
+    if (status && typeof status === "string" && status.trim() !== "" && status.trim() !== "ALL") {
+      const normalizedStatus = status.trim().replace(/\s+/g, "_");
+      if (Object.values(TaskStatus).includes(normalizedStatus)) {
+        where.status = normalizedStatus;
+      }
+    }
+
+    const [totalTasks, tasks] = await prisma.$transaction([
+      prisma.task.count({ where }),
+      prisma.task.findMany({
+        where,
+        skip,
+        take: limitNum,
+        orderBy: { createdAt: "desc" },
+        include: {
+          user: {
+            select: userSelect,
+          },
         },
+      }),
+    ]);
+
+    const totalPages = Math.ceil(totalTasks / limitNum) || 1;
+
+    return res.status(200).json({
+      success: true,
+      tasks,
+      pagination: {
+        totalTasks,
+        page: pageNum,
+        limit: limitNum,
+        totalPages,
+        hasNextPage: pageNum < totalPages,
+        hasPrevPage: pageNum > 1,
       },
     });
-
-    return res.status(200).json({ success: true, tasks });
   } catch (error) {
     console.error("Get all tasks error:", error);
     return res
@@ -30,6 +80,7 @@ export const getAllTask = async (req, res) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
+
 
 export const getTaskById = async (req, res) => {
   try {

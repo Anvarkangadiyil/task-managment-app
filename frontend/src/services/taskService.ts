@@ -1,9 +1,16 @@
 import { api } from "@/lib/api";
-import type { Task, CreateTaskInput, UpdateTaskInput } from "@/types/task";
+import type {
+  Task,
+  CreateTaskInput,
+  UpdateTaskInput,
+  TaskQueryParams,
+  PaginationMeta,
+} from "@/types/task";
 
 export interface TasksResponse {
   success: boolean;
   tasks: Task[];
+  pagination?: PaginationMeta;
   message?: string;
 }
 
@@ -13,8 +20,10 @@ export interface TaskResponse {
   message?: string;
 }
 
-export const getTasksApi = async (): Promise<TasksResponse> => {
-  const response = await api.get<TasksResponse>("/tasks");
+export const getTasksApi = async (
+  params?: TaskQueryParams
+): Promise<TasksResponse> => {
+  const response = await api.get<TasksResponse>("/tasks", { params });
   return response.data;
 };
 
