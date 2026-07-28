@@ -6,6 +6,7 @@ import {
   createTaskSchema,
   updateTaskSchema,
   taskIdParamSchema,
+  getTasksQuerySchema,
 } from "../validators/task.validator.js";
 
 import {
@@ -19,36 +20,39 @@ import {
 const taskRoute = Router();
 
 // GET /api/v1/tasks
-taskRoute.get("/tasks", authorize, getAllTask);
+taskRoute.get(
+  "/",
+  authorize,
+  validate(getTasksQuerySchema, "query"),
+  getAllTask
+);
 
 // GET /api/v1/tasks/:id
 taskRoute.get(
-  "/tasks/:id",
+  "/:id",
   authorize,
   validate(taskIdParamSchema, "params"),
-  getTaskById,
+  getTaskById
 );
 
 // POST /api/v1/tasks
-taskRoute.post("/tasks", authorize, validate(createTaskSchema), createTask);
-
-
+taskRoute.post("/", authorize, validate(createTaskSchema), createTask);
 
 // PUT /api/v1/tasks/:id
 taskRoute.put(
-  "/tasks/:id",
+  "/:id",
   authorize,
   validate(taskIdParamSchema, "params"),
   validate(updateTaskSchema),
-  updateTask,
+  updateTask
 );
 
 // DELETE /api/v1/tasks/:id
 taskRoute.delete(
-  "/tasks/:id",
+  "/:id",
   authorize,
   validate(taskIdParamSchema, "params"),
-  deleteTask,
+  deleteTask
 );
 
 export default taskRoute;
