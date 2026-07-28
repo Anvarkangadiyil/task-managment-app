@@ -1,75 +1,51 @@
-# React + TypeScript + Vite
+# Task Manager Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The client-side interface for Task Manager, built with React 19, Vite, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Component Architecture
 
-## React Compiler
+The frontend follows a modular component structure using reusable Shadcn-style UI primitives:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **`src/components/ui/`**: Base UI primitives (`Badge`, `Modal`, `Button`, `Input`, `Select`, `Card`, `Alert`).
+- **`src/components/navbar/`**: Header navigation components (`NavBrand`, `UserProfileMenu`).
+- **`src/components/dashboard/`**: Dashboard view sections (`TaskFilterToolbar`, `TaskList`, `WorkspaceBanner`).
+- **`src/pages/`**: Main pages (`LoginPage`, `RegisterPage`, `DashboardPage`).
+- **`src/context/`**: Global state providers (`AuthContext`).
+- **`src/services/`**: API interaction services (`authService.ts`, `taskService.ts`).
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Environment Setup
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Create a `.env` file in the `frontend` root directory:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```env
+VITE_API_URL=http://localhost:5500/api/v1
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Refer to `.env.example` for reference settings.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Available Scripts
 
-```
+In the `frontend` directory, you can run:
+
+### `npm run dev`
+Starts the Vite development server on `http://localhost:5173`.
+
+### `npm run build`
+Compiles TypeScript and builds the production-ready application inside the `dist` directory.
+
+### `npx tsc --noEmit`
+Runs the TypeScript type checker to verify code correctness without producing build output.
+
+---
+
+## Features
+
+- **Authentication & Protected Routing**: Handled via `AuthContext`, `ProtectedRoute`, and `PublicOnlyRoute`.
+- **Role-Based Views**: Dynamic UI controls adapted to `user` or `admin` roles.
+- **Server-Side Pagination & Filtering**: Real-time search, status filter, and page navigation controls.
