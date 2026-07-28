@@ -88,6 +88,11 @@ After configuring your database credentials in the backend environment file, exe
    npx prisma generate
    ```
 
+3. **Seed Initial Database Records**:
+   ```bash
+   npx prisma db seed
+   ```
+
 ---
 
 ## Running the Application

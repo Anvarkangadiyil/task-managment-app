@@ -50,6 +50,9 @@ Synchronizes the Prisma schema directly with your Supabase PostgreSQL database.
 ### `npx prisma generate`
 Generates the Prisma Client TypeScript/JavaScript definitions based on `schema.prisma`.
 
+### `npx prisma db seed` (or `npm run db:seed`)
+Populates the database with initial sample users (admin and standard users) and sample tasks.
+
 ---
 
 ## Available Scripts
