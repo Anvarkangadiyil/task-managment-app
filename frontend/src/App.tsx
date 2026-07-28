@@ -21,7 +21,7 @@ function App() {
 
           {/* Protected Application Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<DashboardPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
           </Route>
 
           {/* Catch-all redirect */}
