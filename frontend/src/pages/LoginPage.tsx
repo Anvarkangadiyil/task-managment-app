@@ -36,7 +36,6 @@ export const LoginPage = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors, isSubmitting },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -57,13 +56,6 @@ export const LoginPage = () => {
         err.message || "Failed to sign in. Please check your credentials.",
       );
     }
-  };
-
-  const handleQuickFill = (email: string, pass: string) => {
-    setValue("email", email, { shouldValidate: true });
-    setValue("password", pass, { shouldValidate: true });
-    setServerError(null);
-    clearError();
   };
 
   const activeError = serverError || authError;
@@ -185,37 +177,6 @@ export const LoginPage = () => {
                 )}
               </Button>
             </form>
-
-            {/* Quick Demo Fill Helper */}
-            <div className="pt-3 border-t border-zinc-800/80">
-              <p className="text-[11px] uppercase tracking-wider text-zinc-500 mb-2 font-medium">
-                Demo Accounts (Click to Fill)
-              </p>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleQuickFill("admin@example.com", "admin123")
-                  }
-                  className="px-2.5 py-1.5 rounded bg-zinc-950 border border-zinc-800 text-zinc-300 hover:border-zinc-700 text-left transition-colors cursor-pointer"
-                >
-                  <div className="font-semibold text-zinc-200">Admin</div>
-                  <div className="text-[10px] text-zinc-500 truncate">
-                    admin@example.com
-                  </div>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickFill("user@example.com", "user123")}
-                  className="px-2.5 py-1.5 rounded bg-zinc-950 border border-zinc-800 text-zinc-300 hover:border-zinc-700 text-left transition-colors cursor-pointer"
-                >
-                  <div className="font-semibold text-zinc-200">User</div>
-                  <div className="text-[10px] text-zinc-500 truncate">
-                    user@example.com
-                  </div>
-                </button>
-              </div>
-            </div>
           </CardContent>
 
           <CardFooter className="flex justify-center border-t border-zinc-800/80 py-4">

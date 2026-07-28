@@ -4,6 +4,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 import { PublicOnlyRoute } from "@/components/PublicOnlyRoute";
 import { LoginPage } from "@/pages/LoginPage";
 import { RegisterPage } from "@/pages/RegisterPage";
+import { DashboardPage } from "@/pages/DashboardPage";
 
 import "./App.css";
 
@@ -20,11 +21,11 @@ function App() {
 
           {/* Protected Application Routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="/" element={<h1>Dashboard</h1>} />
+            <Route path="/" element={<DashboardPage />} />
           </Route>
 
           {/* Catch-all redirect */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
